@@ -1,0 +1,3 @@
+# Fastqc running checks for contaminants
+
+fastqc --extract -o fastqc_run1 --contaminants /home/univ3533/anaconda3/pkgs/fastqc-0.11.7-pl5.22.0_1/opt/fastqc-0.11.7/Configuration/contaminant_list.txt *
