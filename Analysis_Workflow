@@ -1,3 +1,20 @@
 # Fastqc running checks for contaminants
 
 fastqc --extract -o fastqc_run1 --contaminants /home/univ3533/anaconda3/pkgs/fastqc-0.11.7-pl5.22.0_1/opt/fastqc-0.11.7/Configuration/contaminant_list.txt *
+
+
+
+
+# Install Trim Galore!
+
+curl -fsSL https://github.com/FelixKrueger/TrimGalore/archive/0.4.5.tar.gz -o trim_galore.tar.gz
+
+tar xvzf trim_galore.tar.gz
+
+sudo mv TrimGalore-0.4.5/trim_galore /usr/bin
+
+
+# Run Trim Galore! on paired fastq files. This is for adapter trimming and 'N' trimming
+
+trim_galore -q 20 --illumina --fastqc --trim-n --paired HEK-L-2_S5_L001_R1_001.fastq.gz  HEK-L-2_S5_L001_R2_001.fastq.gz 
+
