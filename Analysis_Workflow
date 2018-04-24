@@ -14,12 +14,17 @@ tar xvzf trim_galore.tar.gz
 sudo mv TrimGalore-0.4.5/trim_galore /usr/bin
 
 
+
 # Run Trim Galore! on paired fastq files. This is for adapter trimming and 'N' trimming
 
 trim_galore -q 20 --illumina --fastqc --trim-n --paired HEK-L-2_S5_L001_R1_001.fastq.gz  HEK-L-2_S5_L001_R2_001.fastq.gz 
 
+
+
 # Downloaded human genome file from gencode/ucsc, filename: hg38.fa.gz (soft-masekd), last modified: 15-Jan-2014 21:14, 
 # source: http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/
+
+
 
 # Downloaded gencode annotations (v28), filename: gencode.v28.chr_patch_hapl_scaff.annotation.gtf.gz
 # source: https://www.gencodegenes.org/releases/current.html
