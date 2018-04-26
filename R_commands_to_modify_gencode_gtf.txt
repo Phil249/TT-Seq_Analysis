@@ -1,0 +1,44 @@
+# R Commands to modify gtf file - i.e. removing 'na' and 'alt' chunks of chromosomes and converting ucsc names to genocde names.
+
+
+gtf_file <- read.table('gencode.v28.chr_patch_hapl_scaff.annotation.gtf', sep = '\t', header = FALSE)
+
+gtf_standard_chroms <- gtf_file[1:2693966,1:9]
+
+
+conversion_file <- read.csv('hg38_assembly_conversion.csv')
+
+library(tidyverse)
+
+library(dplyr)
+
+filter(conversion_file, UCSC.style.name %like% c("na", "alt"))
+
+chr_un_random <- conversion_file[25:192,1:2]
+
+chr_na_alt <- conversion_file[193:593,1:2]
+
+gtf_non_standard_chrs <- gtf_file[2693967:2939655,1:9]
+
+vector_na_alts_gtf_non_stds <- match(gtf_non_standard_chrs,chr_na_alt[193:593,2])
+gtf_chrun <- gtf_non_standard_chrs[!(gtf_non_standard_chrs[,1]) %in% chr_na_alt[,2],]
+
+
+df2 <- merge(x=gtf_file, y=conversion_file, by.x='V1', by.y='GenBank.Accn', all.x =TRUE)
+
+filter(df2, !grepl("na", UCSC.style.name))
+df2_no_na <- filter(df2, !grepl("na", UCSC.style.name))
+
+df2_no_na_no_alt <- filter(df2_no_na, !grepl("alt", UCSC.style.name))
+
+gtf_chrun <- df2_no_na_no_alt[2693967:2694683, c(10,2,3,4,5,6,7,8,9)]
+
+names(gtf_chrun)[1] <- paste("V1")
+
+gtf_std_chrUN <- rbind(gtf_standard_chroms, gtf_chrun)
+
+
+write.table(gtf_std_chrUN, "gtf_std_chrUN.gtf", sep="\t")
+
+
+
