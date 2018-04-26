@@ -36,3 +36,22 @@ trim_galore -q 20 --illumina --fastqc --trim-n --paired HEK-L-2_S5_L001_R1_001.f
 bash remove_alt_hap_from_genome.sh
 
 
+
+# In R, run the commands listed in R_commands_to_modify_gencode_gtf.txt -> Output file is gtf_std_chrUN.gtf
+
+
+
+# To add spike-in sequences to the genome file, run:
+
+cat hg38NoAltNoHap.fa 4sU_spike_ins.fa >hg38NoAltNoHap_w_spikes.fa
+
+
+
+# To build genome with hisat2 run bash script make_Genome_NoHap_NoAlt_spikes_Hisat2.sh
+
+bash make_Genome_NoHap_NoAlt_spikes_Hisat2.sh
+
+
+
+
+
