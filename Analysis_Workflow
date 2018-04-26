@@ -28,3 +28,11 @@ trim_galore -q 20 --illumina --fastqc --trim-n --paired HEK-L-2_S5_L001_R1_001.f
 
 # Downloaded gencode annotations (v28), filename: gencode.v28.chr_patch_hapl_scaff.annotation.gtf.gz
 # source: https://www.gencodegenes.org/releases/current.html
+
+
+
+#To remove 'alt' and 'hap' chunks of the human genome, run the remove_alt_hap_from_genome_bash.sh script:
+
+bash remove_alt_hap_from_genome.sh
+
+
