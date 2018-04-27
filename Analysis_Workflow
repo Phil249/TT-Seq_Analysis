@@ -68,5 +68,24 @@ bash run_hisat2_mapping.sh
 
 
 
+# Install samtools via bioconda:
+
+ conda install -c bioconda samtools 
+ 
+ 
+ 
+ # run samtools to convert sam files into bam files using the run_samtools_1.sh bash script:
+ 
+ bash run_samtools_1.sh
+ 
+ 
+ 
+ # Now merge the two minus strand files and the two plus strand files with the run_samtools_merge.sh bash script:
+ 
+ bash run_samtools_merge.sh
+ 
+ 
+
+
 
 
