@@ -58,7 +58,13 @@ bash make_Genome_NoHap_NoAlt_spikes_Hisat2.sh
 zcat HEK-L-2_S5_L001_R1_001_val_1.fq.gz HEK-L-2_S5_L002_R1_001_val_1.fq.gz HEK-L-2_S5_L003_R1_001_val_1.fq.gz HEK-L-2_S5_L004_R1_001_val_1.fq.gz >HEK-L-2_R1_merged.fq
 zcat HEK-L-2_S5_L001_R2_001_val_2.fq.gz HEK-L-2_S5_L002_R2_001_val_2.fq.gz HEK-L-2_S5_L003_R2_001_val_2.fq.gz HEK-L-2_S5_L004_R2_001_val_2.fq.gz >HEK-L-2_R2_merged.fq
 
-# etc. 
+# etc. Then, compress the files using gzip.
+
+
+
+# For hisat2 alignment, run the run_hisat2_mapping.sh bash script:
+
+bash run_hisat2_mapping.sh
 
 
 
