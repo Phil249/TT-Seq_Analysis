@@ -65,24 +65,61 @@ zcat HEK-L-2_S5_L001_R2_001_val_2.fq.gz HEK-L-2_S5_L002_R2_001_val_2.fq.gz HEK-L
 # For hisat2 alignment, run the run_hisat2_mapping.sh bash script:
 
 bash run_hisat2_mapping.sh
-
-
+ 
+ 
 
 # Install samtools via bioconda:
 
+
  conda install -c bioconda samtools 
+
  
+
  
+
  
- # run samtools to convert sam files into bam files using the run_samtools_1.sh bash script:
+
+ # run samtools to convert sam files into bam files 
  
  bash run_samtools_1.sh
+
  
- 
- 
+
  # Now merge the two minus strand files and the two plus strand files with the run_samtools_merge.sh bash script:
+
  
+
  bash run_samtools_merge.sh
+
+ 
+
+ 
+
+ # Sort and index the bam files using the run_samtools_sort.sh and run_samtools_index bash scripts.
+
+ 
+
+ bash run_samtools_sort.sh
+
+ 
+ bash run_samtools_index.sh
+
+ 
+
+ # Create counts table in R to generate spike-in ratios for calibration between samples. See R_commands_for_feature_counts.txt file.
+ # Based on the spike-in counts, calculate spike-in-ratio scaling factors (scale files with larger spike in counts down rather than scaling up the smaller ones).
+ 
+ 
+ 
+
+ # Convert the sorted bam-file to a bedgraph file using genomecov
+
+
+ conda install -c bioconda bedtools
+ 
+  
+
+ 
  
  
 
