@@ -1,0 +1,9 @@
+
+
+fastqc --extract -o fastqc_files --contaminants /home/univ3533/anaconda3/pkgs/fastqc-0.11.7-pl5.22.0_1/opt/fastqc-0.11.7/Configuration/contaminant_list.txt *
+
+
+trim_galore -q 20 --illumina --fastqc --trim-n -o trimmed_fastqs --paired FILE_1 FILE_2
+
+
+
