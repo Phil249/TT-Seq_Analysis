@@ -3,7 +3,37 @@
 fastqc --extract -o fastqc_files --contaminants /home/univ3533/anaconda3/pkgs/fastqc-0.11.7-pl5.22.0_1/opt/fastqc-0.11.7/Configuration/contaminant_list.txt *
 
 
-trim_galore -q 20 --illumina --fastqc --trim-n -o trimmed_fastqs --paired FILE_1 FILE_2
+trim_galore -q 20 --illumina --fastqc --trim-n -o trimmed_fastqs --paired HEK-5-A-S9_L001_R1_001.fq HEK-5-A-S9_L001_R2_001.fq
+
+
+zcat HEK-5-A-S9_L001_R1_val_1.fq HEK-5-A-S9_L002_R1_val_1.fq HEK-5-A-S9_L003_R1_val_1.fq HEK-5-A-S9_L004_R1_val_1.fq >HEK_5_A_R1_merged.fq
+zcat HEK-5-A-S9_L001_R2_val_1.fq HEK-5-A-S9_L002_R2_val_1.fq HEK-5-A-S9_L003_R2_val_1.fq HEK-5-A-S9_L004_R2_val_1.fq >HEK_5_A_R2_merged.fq
+
+gzip HEK_5_A_R1_merged.fq
+gzip HEK_5_A_R2_merged.fq
+
+
+hisat2 -q -k 2 --no-mixed --no-discordant -p 1 -x /media/univ3533/DATAPART1/Phil_TT_Seq_01_19/Mapping/hg38NoAltNoHap_w_spikes_Hisat2 -1 HEK_5_A_R1_merged.fq.gz -2 HEK_5_A_R2_merged.fq.gz -S HEK_5_A.sam
+
+
+samtools view -h -q 40 -f 99 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Minus_1.bam &
+samtools view -h -q 40 -f 147 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Minus_2.bam &
+samtools view -h -q 40 -f 163 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Plus_1.bam &
+samtools view -h -q 40 -f 83 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Plus_2.bam
+
+
+samtools merge HEK_5_A_Minus_merged.bam HEK_5_A_Minus_1.bam HEK_5_A_Minus_2.bam &
+samtools merge HEK_5_A_Plus_merged.bam HEK_5_A_Plus_1.bam HEK_5_A_Plus_2.bam
+
+
+samtools sort HEK_5_A_Minus_merged.bam HEK_5_A_Minus_sorted & 
+samtools sort HEK_5_A_Plus_merged.bam HEK_5_A_Plus_sorted
+
+
+samtools index HEK_5_A_Minus_sorted.bam &
+samtools index HEK_5_A_Plus_sorted.bam
+
+
 
 
 
