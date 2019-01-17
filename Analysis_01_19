@@ -1,10 +1,17 @@
 
+# Perform fastqc:
 
 fastqc --extract -o fastqc_files --contaminants /home/univ3533/anaconda3/pkgs/fastqc-0.11.7-pl5.22.0_1/opt/fastqc-0.11.7/Configuration/contaminant_list.txt *
 
 
+
+# Trim using Trim-Galore! (Quality cut-off: 20; trim Ns (--trim-n), Paired-end Sequencing, detect Illumina adaptors):
+
 trim_galore -q 20 --illumina --fastqc --trim-n -o trimmed_fastqs --paired HEK-5-A-S9_L001_R1_001.fq HEK-5-A-S9_L001_R2_001.fq
 
+
+
+# Combine files and gzip:
 
 zcat HEK-5-A-S9_L001_R1_val_1.fq HEK-5-A-S9_L002_R1_val_1.fq HEK-5-A-S9_L003_R1_val_1.fq HEK-5-A-S9_L004_R1_val_1.fq >HEK_5_A_R1_merged.fq
 zcat HEK-5-A-S9_L001_R2_val_1.fq HEK-5-A-S9_L002_R2_val_1.fq HEK-5-A-S9_L003_R2_val_1.fq HEK-5-A-S9_L004_R2_val_1.fq >HEK_5_A_R2_merged.fq
@@ -13,8 +20,15 @@ gzip HEK_5_A_R1_merged.fq
 gzip HEK_5_A_R2_merged.fq
 
 
+
+# Alignment using hisat2:
+
 hisat2 -q -k 2 --no-mixed --no-discordant -p 1 -x /media/univ3533/DATAPART1/Phil_TT_Seq_01_19/Mapping/hg38NoAltNoHap_w_spikes_Hisat2 -1 HEK_5_A_R1_merged.fq.gz -2 HEK_5_A_R2_merged.fq.gz -S HEK_5_A.sam
 
+
+
+
+# Convert into bam files, then merge, sort and index files:
 
 samtools view -h -q 40 -f 99 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Minus_1.bam &
 samtools view -h -q 40 -f 147 -F 3852 -bS HEK_5_A.sam > HEK_5_A_Minus_2.bam &
@@ -32,6 +46,44 @@ samtools sort HEK_5_A_Plus_merged.bam HEK_5_A_Plus_sorted
 
 samtools index HEK_5_A_Minus_sorted.bam &
 samtools index HEK_5_A_Plus_sorted.bam
+
+__________________________________________________________________________________________________________________________
+# R commands to generate counts tables using featureCounts:
+
+
+source("https://bioconductor.org/biocLite.R")
+library("Rsamtools")
+library("GenomicFeatures")
+library("GenomicAlignments")
+library("BiocParallel")
+library("DESeq2")
+library("edgeR")
+library("Rsubread")
+
+HEK_5_A_Minus_counts = featureCounts("HEK_5_A_Minus_sorted.bam", annot.ext = gtf_gene_table_w_spikeins.gtf", isGTFAnnotationFile = TRUE, 
+GTF.featureType = "gene", GTF.attrType = "gene_id", isPairedEnd = TRUE)
+
+write.table(x = data.frame(HEK_5_A_Minus_counts$annotation[,c( "Length")], HEK_5_A_Minus_counts$counts, singtsAsFactors = FALSE), 
+file = "HEK_5_A_Minus_counts.txt", sep = "\t")
+
+HEK_5_A_Plus_counts = featureCounts("HEK_5_A_Plus_sorted.bam", annot.ext = gtf_gene_table_w_spikeins.gtf", isGTFAnnotationFile = TRUE, 
+GTF.featureType = "gene", GTF.attrType = "gene_id", isPairedEnd = TRUE)
+
+write.table(x = data.frame(HEK_5_A_Plus_counts$annotation[,c( "Length")], HEK_5_A_Plus_counts$counts, singtsAsFactors = FALSE), 
+file = "HEK_5_A_Plus_counts.txt", sep = "\t")
+
+HEK_5_A_Minus_counts <- read.table("HEK_5_A_Minus_counts.txt")
+HEK_5_A_Plus_counts <- read.table("HEK_5_A_Plus_counts.txt")
+
+
+HEK_5_A_counts <- HEK_5_A_Minus_counts + HEK_5_A_Plus_counts
+
+write.table(HEK_5_A_counts, file = "HEK_5_A_counts.txt", sep = "\t')
+
+______________________________________________________________________________________________________________________________
+
+
+
 
 
 
