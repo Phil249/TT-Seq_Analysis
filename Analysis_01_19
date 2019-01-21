@@ -83,6 +83,19 @@ write.table(HEK_5_A_counts, file = "HEK_5_A_counts.txt", sep = "\t')
 ______________________________________________________________________________________________________________________________
 
 
+# Now calculate scaling factor (X) based on spike-in counts in order to calibrate samples when converting bam to bed files:
+
+bedtools genomecov -ibam HEK_5_A_Plus_sorted.bam -bga -split -scale X >& HEK_5_A_Plus.bed
+
+
+# Convert to bigwigs:
+
+wigToBigWig HEK_5_A_Minus.bed hg38_chrom_sizes.txt HEK_5_A_Minus.bw
+
+
+
+
+
 
 
 
